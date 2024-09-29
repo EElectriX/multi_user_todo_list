@@ -1,0 +1,102 @@
+{% extends 'base/main.html' %}
+
+{% block extra_styles %}
+<!-- Additional styles for the registration page (if any) -->
+<style>
+    /* Style the form and page */
+    body {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        height: 100vh;
+        background-color: #f8f9fa;
+        padding-top: 50px;
+    }
+
+    h2 {
+        font-size: 2em;
+        margin-bottom: 20px;
+        margin-left: 80px;
+        color: #333;
+    }
+
+    form {
+        width: 300px;
+        padding: 20px;
+        background-color: rgba(249, 249, 249, 0.5);
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    form p {
+        margin-bottom: 15px;
+    }
+
+    form button {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background-color 0.3s;
+    }
+
+    form button:hover {
+        background-color: #0056b3;
+    }
+
+    h3 {
+        margin-top: 20px;
+        font-size: 1.1em;
+        color: #333;
+    }
+
+    h3 a {
+        text-decoration: none;
+        color: #007bff;
+        margin-left: 5px;
+    }
+
+    h3 a:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<body>
+    <div id="register">
+        <div>
+        {% if messages %}
+        <div>
+            {% for message in messages %}
+                <div class="alert alert-danger">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    </div>
+    
+    <form method="POST">
+        <h2>Register</h2>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Register</button>
+        <h3>Already have an account? 
+            <a href="{% url 'login' %}">Login</a>
+        </h3>
+    </form>
+
+   
+    </div>
+
+    
+</body>
+
+{% endblock content %}

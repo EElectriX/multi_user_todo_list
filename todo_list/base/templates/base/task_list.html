@@ -1,0 +1,220 @@
+{% extends 'base/main.html' %}
+
+{% block extra_styles %}
+<head>
+    <style>
+
+        
+        
+        .container{
+            width: 40%; /* Reduced width of the task details div */
+            margin: auto;
+            background-color: rgba(249, 249, 249, 0.5);
+            padding: 15px; /* Reduced padding */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+
+        .task-wrapper {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+        }
+
+        .task-title {
+            font-size: 24px;
+            color: #ff5722;
+        }
+
+        .task-controls {
+            display: flex;
+            align-items: center;
+            
+            display: flex;
+            gap: 20px;
+            align-items: center;
+    
+        }
+
+        .delete-link {
+            color: #ff5722;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        .handle {
+            cursor: move;
+        }
+
+        .task-controls {
+            display: flex;
+            gap: 30px; /* Adjust spacing between the items */
+            align-items: center;
+        }
+    
+        .task-control-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+    
+        .task-control-item i {
+            font-size: 24px; /* Adjust icon size */
+            margin-bottom: 5px; /* Space between the icon and the label */
+        }
+    
+        .task-control-item span {
+            font-size: 14px; /* Label size */
+            color: #333; /* Adjust text color */
+        }
+        .logout {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .logout:hover {
+            background-color: #0056b3;
+        }
+
+        #task-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-top:1px solid rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+        
+        #task-title {
+            font-size: 24px;
+            color: white;
+
+
+        }
+        #create{
+            font-size: 12px;
+            color: #ff5722;
+        }
+
+        #search-add-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+       
+     </style>
+    </head>
+{% endblock %}
+
+{% block content %}
+
+<body>
+<div class ="container">
+<div class="header_bar" >
+<div>
+        {% if request.user.is_authenticated %}
+   
+    {% comment %} <h2>Hello! {{request.user|title}}</h2> {% endcomment %}
+    <h2>Hello! {{request.user}}</h2>
+    <h3>You have {{count}} incompltete task{{count |pluralize:"s"}}</h3>
+    <h3>Your total number of task{{counting |pluralize:"s"}} is :{{counting}}</h3>
+</div>
+    <form action="{% url 'logout' %}" method="POST">
+        {% csrf_token %}
+        <button class="logout" type="submit">Log Out</button>
+    </form>
+    {% else %}
+    
+    <form action="{% url 'login' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">Login</button>
+    </form>
+    {% comment %} <a href="{% url 'login' %}">Login</a> {% endcomment %}
+    {% endif %}
+
+    
+
+
+</div>
+
+<h1 class="todo-header">MY To Do List</h1>
+
+
+
+
+
+
+
+<div id="search-add-wrapper" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+    <form method="GET" style="display: flex; flex: 1;">
+        <input type='text' name='search-area' placeholder="Search your task" value="{{search_input}}" style="flex: 1; padding: 10px; border-radius: 5px; border: 1px solid #ccc; margin-right: 10px;">
+        <input class="button" type="submit" value='Search' style="padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
+    </form>
+
+    <div style="margin-left: 20px; background-color: white; padding: 10px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); display: flex; align-items: center;">
+        <a href="{% url 'task-create' %}" style="display: flex; align-items: center; text-decoration: none; color: #4ca968;">
+            <i class="fa-solid fa-plus fa-xl" style="margin-right: 5px;"></i>
+            <span style="font-size: 16px;">Add task</span>
+        </a>
+    </div>
+</div>
+
+
+
+
+<div id="tasklist" class="task-items-wrapper">
+    {% for task in tasks %}
+    <div class="task-wrapper" data-position="{{task.pk}}">
+        <div class="task-title" style="color: black;">
+            {% if task.complete %}
+            <i class="fa-solid fa-check" style="color: #6d3af8;"></i>
+            <i><s>{{task.title}}</s>   <span id="create" style="color: gray; font-size: 14px; margin-left: 5px;">{{task.create}}</span> </i> 
+            {% else %}
+            <i class="fa-solid fa-xmark" style="color: #c60c27;"></i>
+            {{task.title}}   <span id="create" style="color: gray; font-size: 14px; margin-left: 5px;">{{task.create}}</span>
+            {% endif %}
+        </div>
+
+
+
+
+
+        <div class="task-controls">
+            <div class="task-control-item">
+                <a class="delete-link" href="{% url 'task-delete' task.id %}">
+                    <i class="fa-solid fa-trash" style="color: #a22a5e;"></i>
+                </a>
+                <span>Delete</span>
+            </div>
+        
+            <div class="task-control-item">
+                <a href="{% url 'task' task.id %}">
+                    <i class="fa-solid fa-eye" style="color: #99089b;"></i>
+                </a>
+                <span>View</span>
+            </div>
+        
+            <div class="task-control-item">
+                <a href="{% url 'task-update' task.id %}">
+                    <i class="fa-solid fa-pen-to-square" style="color: #a5319b;"></i>
+                </a>
+                <span>Update</span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+      
+
+{% endblock content %}

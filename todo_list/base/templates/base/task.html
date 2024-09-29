@@ -1,0 +1,58 @@
+{% extends 'base/main.html' %}
+
+{% block extra_styles %}
+<style>
+    /* Page-specific styles */
+    .task-title {
+        font-size: 24px;
+        color:  #007bff;
+        margin-bottom: 10px;
+    }
+
+    .task-details {
+        width: 40%; /* Reduced width of the task details div */
+        margin: auto;
+        background-color: rgba(249, 249, 249, 0.5);
+        padding: 15px; /* Reduced padding */
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Back button styling */
+    .back-btn {
+        display: inline-block;
+        padding: 8px 15px;
+        background-color:  #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        font-size: 16px;
+    }
+
+    .back-btn:hover {
+        background-color: #e64a19;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+        .task-title {
+            font-size: 20px;
+        }
+
+        .task-details {
+            padding: 10px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+  
+    <div class="task-details">
+        <a href="{% url 'tasks' %}" class="back-btn">Go Back</a>
+        <h1 class="task-title">{{ task.title }}</h1>
+        <p>Description: {{ task.description }}</p>
+        <p>Status: {% if task.complete %}Completed{% else %}Incomplete{% endif %}</p>
+    </div>
+{% endblock %}
