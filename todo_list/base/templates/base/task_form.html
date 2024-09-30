@@ -3,7 +3,7 @@
 {% block extra_styles %}
 <head>
     <style>
-        /* Styling the form-control class for inputs and text areas */
+        /* General styles for form */
         .form-control {
             width: 100%;
             padding: 10px;
@@ -21,20 +21,17 @@
             outline: none;
         }
 
-        /* Styling the form-check-input for checkbox */
         .form-check-input {
             margin-right: 10px;
             transform: scale(1.2);
         }
 
-        /* Optional: Style for form labels */
         label {
             font-weight: bold;
             margin-bottom: 5px;
             display: block;
         }
 
-        /* Optional: Style for the submit button */
         .btn-submit {
             background-color: #28a745;
             color: white;
@@ -49,7 +46,6 @@
             background-color: #218838;
         }
 
-        /* Optional: Style for the form container */
         .form-container {
             max-width: 600px;
             margin: 0 auto;
@@ -58,39 +54,86 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         .task-details {
-            width: 40%; /* Reduced width of the task details div */
+            width: 40%;
             margin: auto;
             background-color: rgba(249, 249, 249, 0.5);
-            padding: 15px; /* Reduced padding */
+            padding: 15px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 1024px) {
+            .task-details {
+                width: 60%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .task-details {
+                width: 80%;
+                padding: 20px;
+            }
+
+            .form-control {
+                font-size: 14px;
+            }
+
+            .btn-submit {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .task-details {
+                width: 90%;
+                padding: 15px;
+            }
+
+            .btn-submit {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
-     
-
 {% endblock %}
 
 {% block content %}
-
 <div class="task-details">
     <a href="{% url 'tasks' %}" class="back-btn">Go Back</a>
     <form method="POST">
         {% csrf_token %}
-        
+
         <!-- Title Field -->
         <div class="form-group">
             {{ form.title.label_tag }}
             {{ form.title }}
         </div>
-        
+
         <!-- Description Field -->
         <div class="form-group">
             {{ form.description.label_tag }}
             {{ form.description }}
         </div>
-        
+
         <!-- Complete Checkbox -->
         <div class="form-group form-check">
             {{ form.complete.label_tag }}
@@ -98,12 +141,7 @@
         </div>
 
         <!-- Submit Button -->
-        <button type="submit" >Update Task</button>
+        <button type="submit" class="btn-submit">Update Task</button>
     </form>
 </div>
-
-
-
-
-
 {% endblock content %}
