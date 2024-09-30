@@ -1,9 +1,8 @@
 {% extends 'base/main.html' %}
 
 {% block extra_styles %}
-<!-- Additional styles for the registration page (if any) -->
+<!-- Additional styles for the registration page -->
 <style>
-    /* Style the form and page */
     body {
         display: flex;
         flex-direction: column;
@@ -14,19 +13,23 @@
         padding-top: 50px;
     }
 
-    h2 {
-        font-size: 2em;
-        margin-bottom: 20px;
-        margin-left: 80px;
-        color: #333;
-    }
-
     form {
-        width: 300px;
+        width: 400px;
         padding: 20px;
         background-color: rgba(249, 249, 249, 0.5);
         border-radius: 8px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+        display: flex;
+        justify-content: center; /* Center the h2 */
+        margin-bottom: 20px; /* Space below the header */
+    }
+
+    h2 {
+        font-size: 2em;
+        color: #333;
     }
 
     form p {
@@ -64,39 +67,123 @@
     h3 a:hover {
         text-decoration: underline;
     }
+
+    /* Alert styling */
+    .alert {
+        width: 89%;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 20px;
+        border: 1px solid #ff0000;
+        background-color: rgb(158, 101, 101);
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Progress bar styling */
+    .progress-bar {
+        width: 100%;
+        height: 5px;
+        background-color: #f30d8c;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 768px) {
+        form {
+            width: 90%; /* Make form width responsive */
+            padding: 15px; /* Adjust padding */
+        }
+
+        h2 {
+            font-size: 1.5em; /* Reduce font size */
+        }
+
+        h3 {
+            font-size: 1em; /* Adjust heading size */
+        }
+
+        form button {
+            padding: 12px; /* Adjust button padding */
+        }
+    }
+
+    @media (max-width: 480px) {
+        h2 {
+            font-size: 1.3em; /* Further reduce font size */
+        }
+
+        form {
+            padding: 10px; /* Further adjust padding */
+        }
+
+        form button {
+            padding: 10px; /* Adjust button padding */
+            font-size: 0.9em; /* Reduce font size */
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-
 <body>
     <div id="register">
-        <div>
-        {% if messages %}
-        <div>
-            {% for message in messages %}
-                <div class="alert alert-danger">
-                    {{ message }}
+        <form method="POST">
+            <div class="header">
+                <h2>Register</h2>
+            </div>
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <!-- Moved the alert message inside the form -->
+            <div class="message">
+                {% if messages %}
+                <div>
+                    {% for message in messages %}
+                        <div class="alert" id="message">
+                            <div class="progress-bar" id="progressBar"></div>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-    </div>
-    
-    <form method="POST">
-        <h2>Register</h2>
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-        <h3>Already have an account? 
-            <a href="{% url 'login' %}">Login</a>
-        </h3>
-    </form>
+                {% endif %}
+            </div>
 
-   
+            <button type="submit">Register</button>
+            <h3>Already have an account? 
+                <a href="{% url 'login' %}">Login</a>
+            </h3>
+        </form>
     </div>
 
-    
+    <!-- JavaScript to hide the message after 6 seconds -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var message = document.getElementById('message');
+            var progressBar = document.getElementById('progressBar');
+            var duration = 6000;  // 6 seconds
+
+            if (message && progressBar) {
+                var startTime = Date.now();
+                var interval = setInterval(function() {
+                    var elapsed = Date.now() - startTime;
+                    var percentage = 100 - (elapsed / duration * 100);
+                    progressBar.style.width = percentage + '%';
+
+                    // After 6 seconds, hide the message and stop the interval
+                    if (elapsed >= duration) {
+                        clearInterval(interval);
+                        message.style.display = 'none';
+                    }
+                }, 100);  // Update every 100ms
+            }
+        });
+    </script>
 </body>
-
 {% endblock content %}

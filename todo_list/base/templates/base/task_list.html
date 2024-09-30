@@ -200,6 +200,43 @@
             }
         }
 
+        
+    .progress {
+    --progress: 0%; /* Adjust this value dynamically as needed */
+    width: 95%; /* Set the desired width */
+    height: 10px; /* Set a smaller height */
+     /* Center it horizontally */
+    border: 1px solid #3c2d94; /* Maintain border styling */
+    padding: 2px; /* Less padding for a smaller look */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional shadow */
+}
+
+.progress .bar {
+    width: var(--progress); /* Use the dynamic progress value */
+    height: 100%; /* Fill the height of the progress bar */
+    background: linear-gradient(rgb(51, 51, 87), rgb(43, 25, 150), rgb(51, 30, 143)); /* Maintain background style */
+    background-repeat: repeat;
+    box-shadow: 0 0 10px 0px rgb(126, 20, 197); /* Optional shadow */
+    transition: width 3s ease; /* Smooth transition for width changes */
+}
+
+
+@property --progress {
+  syntax: "<length>";
+  initial-value: 0%;
+  inherits: true;
+}
+
+@keyframes shine {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 50px; }
+}
+
+@keyframes end {
+  0%, 100% { box-shadow: 0 0 10px 0px rgb(30, 13, 175); }
+  50% { box-shadow: 0 0 15px 5px rgb(75, 41, 168); }
+}
+
     </style>
     </head>
 {% endblock %}
@@ -236,6 +273,14 @@
 </div>
 
 <h1 class="todo-header">MY To Do List</h1>
+
+<div class="progress">
+    <div class="bar">
+      <div class="progress-value"></div>
+    </div>
+  </div>
+
+
 
 
 
@@ -303,6 +348,17 @@
     {% endfor %}
 </div>
 
-      
+<script>
+    const count1 = {{ count }};
+    const count2 = {{ counting }};
+    
+    // Calculate the progress percentage
+    let progressValue = ((count2 - count1) / count2) * 100; 
+    const progress = document.querySelector(".progress");
+
+    // Set the initial progress value when the page loads
+    progress.style.setProperty("--progress", `${progressValue}%`);
+</script>
+
 
 {% endblock content %}

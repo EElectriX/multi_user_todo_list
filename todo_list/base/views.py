@@ -55,11 +55,14 @@ class Register_page(FormView):
         user = form.save()
         if user is not None:
             login(self.request, user)
+        else:
+            messages.error(self.request, 'Registration failed. Username already exists.')
         return super(Register_page, self).form_valid(form)
+
 
     def form_invalid(self, form):
         # Add an error message to the form
-        messages.error(self.request, 'Registration failed. Please correct the errors below.')
+        messages.error(self.request, 'Registration failed.check the password rules and try again.')
         return super(Register_page, self).form_invalid(form)
 
     def get(self, request, *args, **kwargs):
