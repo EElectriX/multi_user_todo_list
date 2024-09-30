@@ -1,8 +1,7 @@
-for admin pannel go to prot http://127.0.0.1:8000/admin
-username=`saptarshi`
-password =`12345`
+for admin pannel go to http://127.0.0.1:8000/admin
 
-normal user 
 
-username=`saptarshi123`
-password =`django#123`
+user 
+username=`dummy`
+password =`12345*dummy`
+
